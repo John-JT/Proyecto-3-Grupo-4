@@ -81,17 +81,17 @@ module mux_DIR_DATO(
     
     //---MULTIPLEXACION DEL BUS BI-DIRECCIONAL DIR_DATO (DEL RTC)---
     // Definicion e inicializacion de variables y parametros
-    parameter [7:0] Transf = 8'h10;     // Constantes que a veces salen del mux (F0 para transferencia y 0)
+    parameter [7:0] Transf = 8'hF0;     // Constantes que a veces salen del mux (F0 para transferencia y 0)
     parameter [7:0] Zero = 8'h00;    
     wire [7:0] OUT_segcr = 8'h00;  
     wire [7:0] OUT_mincr = 8'h00;      
     wire [7:0] OUT_horacr = 8'h00;
     
-    reg [7:0] DIR_DATO_out;
-    reg [3:0] Selec_Mux_DD;
+    reg [7:0] DIR_DATO_out;                 // Variables que define una salida para el inout DIR_DATO
+    reg [3:0] Selec_Mux_DD;                 // Selecciona que sale por DIR_DATO
     assign Selec_Mux_DDw = Selec_Mux_DD;
     
-    reg [3:0] cont_lec = 4'b0010;
+    reg [3:0] cont_lec = 4'b0010;           // Contadores que podrian tomar Selec_Mux
     reg [4:0] cont_escaux = 5'b00000;
     reg [3:0] cont_esc = 4'b0011;
     
@@ -208,8 +208,8 @@ module mux_DIR_DATO(
     assign IN_mincr = IN_mincrreg;     
     assign IN_horacr = IN_horacrreg;
     
-    reg [7:0] DIR_DATO_in;   
-    reg [3:0] Selec_Demux_DD;
+    reg [7:0] DIR_DATO_in;                      // Aca se guarda un valor que podria entrarle a DIR_DATO
+    reg [3:0] Selec_Demux_DD;                   // Selecciona a que se le asigna lo que entra por DIR_DATO
     assign Selec_Demux_DDw = Selec_Demux_DD;
     
     // Demux para la entrada de DIR_DATO
@@ -344,23 +344,23 @@ module mux_DIR_DATO(
     always @(*)
     begin
         case (Control)
-            2'b00: Selec_Demux_DD <= 4'b1111;
+            8'h00: Selec_Demux_DD <= 4'b1111;
             
-            2'b01:
+            8'h01:
             case (Selec_Mux_DD)
-                4'b0000: Selec_Demux_DD <= 4'b1111; 
-                4'b0001: Selec_Demux_DD <= 4'b1111; 
+                4'b0000: Selec_Demux_DD <= 4'b1111;     //  En estos casos, lo que entra po DIR_DATO no es de interes         
+                4'b0001: Selec_Demux_DD <= 4'b1111;     // Se puede estar escribiendo
                 4'b0010: Selec_Demux_DD <= 4'b1111; 
                 4'b1100: Selec_Demux_DD <= 4'b1111; 
                 4'b1101: Selec_Demux_DD <= 4'b1111; 
                 4'b1110: Selec_Demux_DD <= 4'b1111; 
                 4'b1111: Selec_Demux_DD <= 4'b1111; 
-                default:    Selec_Demux_DD <= Selec_Mux_DD - 4'b0011;
+                default:    Selec_Demux_DD <= Selec_Mux_DD - 4'b0011;   //Logica en el caso de que si se ocupe leer
             endcase
             
-            2'b10:
+            8'h02:
             begin
-                if (LE)
+                if (LE) // Si se esta leyendo
                     case (Selec_Mux_DD)
                             4'b0000: Selec_Demux_DD <= 4'b1111; 
                             4'b0001: Selec_Demux_DD <= 4'b1111; 
@@ -375,7 +375,7 @@ module mux_DIR_DATO(
                     Selec_Demux_DD <= 4'b1111;
             end
             
-            2'b11:  Selec_Demux_DD <= 4'b1111;
+            8'h03:  Selec_Demux_DD <= 4'b1111;
             
             default: Selec_Demux_DD <= 4'b1111;
         endcase
@@ -408,9 +408,9 @@ module mux_DIR_DATO(
     always @(posedge reloj)
     begin
         case (Control)
-            8'h00:   dir <= 1'b0;
-            
-            8'h01:
+            8'h00:   dir <= 1'b0;                   // dir esta en 1 cuando estamos en un intervalo de tiempo en el cual
+                                                    // algo podria ingresar por DIR_DATO y cero cuando mas bien se 
+            8'h01:                                  // podria estar mandando algo por le bus
                  begin
                     if (cont_32 > 5'b01011)
                         dir <= 1'b1;
@@ -436,8 +436,8 @@ module mux_DIR_DATO(
     end
     
     // Definicion de READ
-    always @(*)
-    begin
+    always @(*)                 // READ = 1 define el tiempo exacto en el que llega un dato del RTC
+    begin                           
         if (dir)
             if (cont_32 > 5'b10111 && cont_32 < 5'b11101)
                 READr <= 1'b1;

@@ -10,7 +10,7 @@
 
 module E_Bloques_Datos(
     // Salidas General
-    output wire enable_cont_I,     
+    output wire enable_cont_I,          // Enables para la ruta de datos, del modulo de inicializacion, fecha, hora, etc.  
     output wire enable_cont_MS,
     output wire enable_cont_fecha,
     output wire enable_cont_hora,
@@ -36,9 +36,9 @@ module E_Bloques_Datos(
     //---LOGICA DE LOS ENABLES DE LOS BLOQUES DE DATOS---
     always @(*)
     begin
-        case (Selec_Mux_DDw)
-            4'b0000:
-            begin
+        case (Selec_Mux_DDw)                    // Dependiendo del valor de la seleccion del mux, o sea dependiendo
+            4'b0000:                            // de lo que se quiera sacar (segundos de la hora por ejemplo) se
+            begin                               // analiza que bloque se debe estar activado (modulo de hora por ejemplo)
                 enable_cont_Ir = 1'b1; 
                 enable_cont_MSr = 1'b0;
                 enable_cont_fechar = 1'b0;
