@@ -83,10 +83,29 @@ module mux_DIR_DATO(
     // Definicion e inicializacion de variables y parametros
     parameter [7:0] Transf = 8'hF0;     // Constantes que a veces salen del mux (F0 para transferencia y 0)
     parameter [7:0] Zero = 8'h00;    
-    wire [7:0] OUT_segcr = 8'h00;  
-    wire [7:0] OUT_mincr = 8'h00;      
-    wire [7:0] OUT_horacr = 8'h00;
+    reg [7:0] OUT_segcr = 8'h41;  
+    reg [7:0] OUT_mincr = 8'h42;      
+    reg [7:0] OUT_horacr = 8'h43;
     
+    // Logica direcciones y datos del crono
+    always @(posedge reloj)
+    begin
+        if (cont_32 < 5'b10000)
+            begin
+            OUT_segcr <= 8'h41;  
+            OUT_mincr <= 8'h42;      
+            OUT_horacr <= 8'h43;
+            end
+       
+        else
+           begin 
+           OUT_segcr <= 8'h00;  
+           OUT_mincr <= 8'h00;      
+           OUT_horacr <= 8'h00;   
+           end
+    end
+    
+    // Otras variables
     reg [7:0] DIR_DATO_out;                 // Variables que define una salida para el inout DIR_DATO
     reg [3:0] Selec_Mux_DD;                 // Selecciona que sale por DIR_DATO
     assign Selec_Mux_DDw = Selec_Mux_DD;
