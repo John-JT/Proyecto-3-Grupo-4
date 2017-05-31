@@ -8,7 +8,7 @@
 
 
 
-module mux_DIR_DATO_tb(             // correr 10000ns
+module mux_DIR_DATO_tb(             // correr 12500ns
     );
     // Entradas General
     reg reloj;
@@ -145,23 +145,34 @@ module mux_DIR_DATO_tb(             // correr 10000ns
    port_id <= 8'h10;
    sync <= 1'b1;
    
-   #20
+   #10
+   en_01 <= 1'b0;
+   
+   #10
    sync <= 1'b0;
    
    #500
+   en_01 <= 1'b1;
    out_port <= 8'h03;
    LE <= 1'b0;
    sync <= 1'b1;
    
-   #20
+   #10
+   en_01 <= 1'b0;
+   
+   #10
    sync <= 1'b0;
    
    #420 
+   en_01 <= 1'b1;
    out_port <= 8'h01;
    LE <= 1'b1;
    sync <= 1'b1;
    
-   #20
+   #10
+   en_01 <= 1'b0;
+   
+   #10
    sync <= 1'b0;
    
    #560
@@ -171,15 +182,22 @@ module mux_DIR_DATO_tb(             // correr 10000ns
    DIR_DATO_IN <= 8'bzzzzzzzz;
    
    #4200
+   en_01 <= 1'b1;
    out_port <= 8'h02;
    LE <= 1'b0;
    sync <= 1'b1;
+     
+   #10
+   en_01 <= 1'b0;  
       
-   #20
+   #10
    sync <= 1'b0;
    
    #2240
    LE <= 1'b1;
+   
+   #3200
+   LE <= 1'b0;  
    end
   
    

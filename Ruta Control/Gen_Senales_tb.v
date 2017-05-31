@@ -8,7 +8,7 @@
 
 
 
-module Gen_Senales_tb(          // Correr 12500ns
+module Gen_Senales_tb(          // Correr 13500ns
     );
     // Entradas general
     reg reloj;
@@ -29,10 +29,10 @@ module Gen_Senales_tb(          // Correr 12500ns
     wire A_D;
     
     // Salidas inter-modular (de la ruta de control)
-    wire [4:0] cont_32;      //**
-    wire enable_cont_32;     //**
-    wire LE;                  //**
-    wire sync;                //**
+    wire [4:0] cont_32;      
+    wire enable_cont_32;     
+    wire LE;                  
+    wire sync;                
 
     
         
@@ -57,8 +57,8 @@ module Gen_Senales_tb(          // Correr 12500ns
                            .A_D(A_D),
                         
                             // Salidas inter-modular
-                            .cont_32(cont_32),                    //**
-                            .enable_cont_32(enable_cont_32),      //**
+                            .cont_32(cont_32),                    
+                            .enable_cont_32(enable_cont_32),      
                             .LE(LE),
                             .sync(sync)
                              );    
@@ -85,33 +85,65 @@ module Gen_Senales_tb(          // Correr 12500ns
      port_id <= 8'h11;
      out_port <= 8'hF1;
      
+     #10
+     en_01 <= 1'b0;
+
+     
      #50
+     en_01 <= 1'b1;
      port_id <= 8'h10;
      out_port <= 8'h00;
      
+     #10
+     en_01 <= 1'b0;
+     
      #3840
+     en_01 <= 1'b1;    
      out_port <= 8'h01;
      
+     #10
+     en_01 <= 1'b0;    
+     
      #1000
+     en_01 <= 1'b1;
      out_port <= 8'h03;
+     
+     #10
+     en_01 <= 1'b0;
      
      #60
      alarma <= 24'h000101;
+     en_01 <= 1'b1;
      port_id <= 8'h01;
      out_port <= 8'h03;
      
-     #60
-     out_port <= 8'h02;
+     #10
+     en_01 <= 1'b0;
      
      #60
+     en_01 <= 1'b1;
      out_port <= 8'h02;
+     
+     #10
+     en_01 <= 1'b0;
+     
+     #60
+     en_01 <= 1'b1;
+     out_port <= 8'h02;
+     
+     #10
+     en_01 <= 1'b0;     
      
      #60
      alarma <= 24'h000000;
      
      #160
+     en_01 <= 1'b1;    
      port_id <= 8'h10;
      out_port <= 8'h02;
+     
+     #10
+     en_01 <= 1'b0;
      end
      
      
