@@ -164,7 +164,7 @@ else if (M_v >= num_fechav && M_v < 6'd18)begin
        pos9 <= 1'b0;
        end
     //else if (M_h >= dc_ano && M_h < 7'd56 && Contador_pos_f== 2'd2 &&  port_id == 1'b1  && in_port == 2'd2 && en_00 == 1'b1)begin
-    else if (M_h >= dc_ano && M_h < 7'd56 && Contador_pos_f== 2'd2 &&  switch_w == 1'b1)begin
+    else if (M_h >= dc_ano && M_h < 7'd56 && Contador_pos_f== 2'd2 &&  switch_w[1] == 1'b1)begin
        pos9 <= 1'b1;
        pos1 <= 1'b0;
        pos2 <= 1'b0;
@@ -294,6 +294,7 @@ always@(posedge reloj) begin
          DC9 <= DC;
          UNI9 <= UNI;
     end
+    
 end
 
 end
@@ -305,6 +306,8 @@ always @(posedge reloj)begin
        DC <= {DIR_DATO[7], DIR_DATO[6], DIR_DATO[5], DIR_DATO[4]};
        UNI <= {DIR_DATO[3], DIR_DATO[2], DIR_DATO[1], DIR_DATO[0]};
         end
+    else
+    begin
         if (M_v >= num_hcv && M_v < 6'd13)
         begin
             if (M_h >= hdc_hora && M_h < huni_hora)begin
@@ -328,37 +331,37 @@ always @(posedge reloj)begin
             
                             /*CRONOMETRO*/
             else if (M_h >= cdc_hora && M_h < cuni_hora)begin
-                if (switch_w)
+                if (switch_w[0])
                 DIR <= {DIRC1, SELEC_COL};
                 else
                 DIR <= {DIR7, SELEC_COL};
             end
             else if (M_h >= cuni_hora && M_h < 7'd70)begin
-                if (switch_w)
+                if (switch_w[0])
                 DIR <= {DIRC2, SELEC_COL};
                 else
                 DIR <= {DIR8, SELEC_COL};
             end
             else if (M_h >= cdc_min && M_h < cuni_min)begin
-                if (switch_w)
+                if (switch_w[0])
                 DIR <= {DIRC3, SELEC_COL};
                 else
                 DIR <= {DIR9, SELEC_COL};
             end
             else if (M_h >= cuni_min && M_h < 7'd76)begin
-                if (switch_w)
+                if (switch_w[0])
                 DIR <= {DIRC4, SELEC_COL};
                 else
                 DIR <= {DIR10, SELEC_COL};
             end    
             else if (M_h >= cdc_seg && M_h < cuni_seg)begin
-                if (switch_w)
+                if (switch_w[0])
                 DIR <= {DIRC5, SELEC_COL};
                 else
                 DIR <= {DIR11, SELEC_COL};
             end
             else if (M_h >= cuni_seg && M_h < 7'd82)begin
-                if (switch_w)
+                if (switch_w[0])
                 DIR <= {DIRC6, SELEC_COL};
                 else
                 DIR <= {DIR12, SELEC_COL};
@@ -397,20 +400,21 @@ always @(posedge reloj)begin
             else
              DIR <= 8'h00; 
             end
-       
+      end     
  end  
                always @(DC1)
                   case (DC1)
                      4'b0000: DIR1  = CERO;
                      4'b0001: DIR1  = UNO;
                      4'b0010: DIR1  = DOS;
-                     4'b0011: DIR1  = TRES;
-                     4'b0100: DIR1  = CUATRO;
-                     4'b0101: DIR1  = CINCO;
-                     4'b0110: DIR1  = SEIS;
-                     4'b0111: DIR1  = SIETE;
-                     4'b1000: DIR1  = OCHO;
-                     4'b1001: DIR1  = NUEVE;
+//                     4'b0011: DIR1  = TRES;
+//                     4'b0100: DIR1  = CUATRO;
+//                     4'b0101: DIR1  = CINCO;
+//                     4'b0110: DIR1  = SEIS;
+//                     4'b0111: DIR1  = SIETE;
+                     4'b1000: DIR1  = CERO;
+                     4'b1001: DIR1  = UNO;
+                     4'b1010: DIR1  = DOS;
                      default: DIR1  = 8'h00;
                   endcase
                   
@@ -440,10 +444,10 @@ always @(posedge reloj)begin
                      4'b0011: DIR3  = TRES;
                      4'b0100: DIR3  = CUATRO;
                      4'b0101: DIR3  = CINCO;
-                     4'b0110: DIR3  = SEIS;
-                     4'b0111: DIR3  = SIETE;
-                     4'b1000: DIR3  = OCHO;
-                     4'b1001: DIR3  = NUEVE;
+//                     4'b0110: DIR3  = SEIS;
+//                     4'b0111: DIR3  = SIETE;
+//                     4'b1000: DIR3  = OCHO;
+//                     4'b1001: DIR3  = NUEVE;
                      default: DIR3  = 8'h00;
                   endcase
                always @(UNI2)
@@ -468,10 +472,10 @@ always @(posedge reloj)begin
                      4'b0011: DIR5  = TRES;
                      4'b0100: DIR5  = CUATRO;
                      4'b0101: DIR5  = CINCO;
-                     4'b0110: DIR5  = SEIS;
-                     4'b0111: DIR5  = SIETE;
-                     4'b1000: DIR5  = OCHO;
-                     4'b1001: DIR5  = NUEVE;
+//                     4'b0110: DIR5  = SEIS;
+//                     4'b0111: DIR5  = SIETE;
+//                     4'b1000: DIR5  = OCHO;
+//                     4'b1001: DIR5  = NUEVE;
                      default: DIR5  = 8'h00;
                   endcase
                always @(UNI3)
@@ -493,13 +497,13 @@ always @(posedge reloj)begin
                      4'b0000: DIR7  = CERO;
                      4'b0001: DIR7  = UNO;
                      4'b0010: DIR7  = DOS;
-                     4'b0011: DIR7  = TRES;
-                     4'b0100: DIR7  = CUATRO;
-                     4'b0101: DIR7  = CINCO;
-                     4'b0110: DIR7  = SEIS;
-                     4'b0111: DIR7  = SIETE;
-                     4'b1000: DIR7  = OCHO;
-                     4'b1001: DIR7  = NUEVE;
+//                     4'b0011: DIR7  = TRES;
+//                     4'b0100: DIR7  = CUATRO;
+//                     4'b0101: DIR7  = CINCO;
+//                     4'b0110: DIR7  = SEIS;
+//                     4'b0111: DIR7  = SIETE;
+//                     4'b1000: DIR7  = OCHO;
+//                     4'b1001: DIR7  = NUEVE;
                      default: DIR7  = 8'h00;
                   endcase
                always @(UNI4)
@@ -524,10 +528,10 @@ always @(posedge reloj)begin
                      4'b0011: DIR9  = TRES;
                      4'b0100: DIR9  = CUATRO;
                      4'b0101: DIR9  = CINCO;
-                     4'b0110: DIR9  = SEIS;
-                     4'b0111: DIR9  = SIETE;
-                     4'b1000: DIR9  = OCHO;
-                     4'b1001: DIR9  = NUEVE;
+//                     4'b0110: DIR9  = SEIS;
+//                     4'b0111: DIR9  = SIETE;
+//                     4'b1000: DIR9  = OCHO;
+//                     4'b1001: DIR9  = NUEVE;
                      default: DIR9  = 8'h00;
                    endcase
                always @(UNI5)
@@ -552,10 +556,10 @@ always @(posedge reloj)begin
                      4'b0011: DIR11= TRES;
                      4'b0100: DIR11= CUATRO;
                      4'b0101: DIR11= CINCO;
-                     4'b0110: DIR11= SEIS;
-                     4'b0111: DIR11= SIETE;
-                     4'b1000: DIR11= OCHO;
-                     4'b1001: DIR11= NUEVE;
+//                     4'b0110: DIR11= SEIS;
+//                     4'b0111: DIR11= SIETE;
+//                     4'b1000: DIR11= OCHO;
+//                     4'b1001: DIR11= NUEVE;
                      default: DIR11= 8'h00;
                    endcase
                always @(UNI6)
@@ -578,12 +582,12 @@ always @(posedge reloj)begin
                      4'b0001: DIR13 = UNO;
                      4'b0010: DIR13 = DOS;
                      4'b0011: DIR13 = TRES;
-                     4'b0100: DIR13 = CUATRO;
-                     4'b0101: DIR13 = CINCO;
-                     4'b0110: DIR13 = SEIS;
-                     4'b0111: DIR13 = SIETE;
-                     4'b1000: DIR13 = OCHO;
-                     4'b1001: DIR13 = NUEVE;
+//                     4'b0100: DIR13 = CUATRO;
+//                     4'b0101: DIR13 = CINCO;
+//                     4'b0110: DIR13 = SEIS;
+//                     4'b0111: DIR13 = SIETE;
+//                     4'b1000: DIR13 = OCHO;
+//                     4'b1001: DIR13 = NUEVE;
                      default: DIR13 = 8'h00;
                   endcase
                always @(UNI7)
@@ -604,14 +608,14 @@ always @(posedge reloj)begin
                    case (DC8)
                      4'b0000: DIR15 = CERO;
                      4'b0001: DIR15 = UNO;
-                     4'b0010: DIR15 = DOS;
-                     4'b0011: DIR15 = TRES;
-                     4'b0100: DIR15 = CUATRO;
-                     4'b0101: DIR15 = CINCO;
-                     4'b0110: DIR15 = SEIS;
-                     4'b0111: DIR15 = SIETE;
-                     4'b1000: DIR15 = OCHO;
-                     4'b1001: DIR15 = NUEVE;
+//                     4'b0010: DIR15 = DOS;
+//                     4'b0011: DIR15 = TRES;
+//                     4'b0100: DIR15 = CUATRO;
+//                     4'b0101: DIR15 = CINCO;
+//                     4'b0110: DIR15 = SEIS;
+//                     4'b0111: DIR15 = SIETE;
+//                     4'b1000: DIR15 = OCHO;
+//                     4'b1001: DIR15 = NUEVE;
                      default: DIR15 = 8'h00;
                    endcase
                always @(UNI8)
@@ -656,8 +660,7 @@ always @(posedge reloj)begin
                      4'b1001: DIR18 = NUEVE;
                      default: DIR18 = 8'h00;
                      endcase
-                       
-                       
+                               
                        
                        
                        

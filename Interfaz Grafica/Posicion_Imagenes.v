@@ -39,8 +39,8 @@ parameter AM = 4'h5; parameter PM = 4'h6;
  parameter HORA1_h = 5'd4; parameter HORA2_h = 5'd5;
  parameter CRONO1_h = 5'd18; parameter CRONO2_h = 5'd19;
  
- parameter AM1_h = 5'd8;  parameter AM2_h = 5'd9;
- parameter PM1_h = 5'd8;  parameter PM2_h = 5'd9;
+ parameter AM1_h = 5'd7;  parameter AM2_h = 5'd8;
+ parameter PM1_h = 5'd7;  parameter PM2_h = 5'd8;
                                                 /*AVATAR*/
  parameter AVA1_h = 5'd11; parameter AVA2_h =5'd12;
                                 
@@ -65,17 +65,17 @@ parameter AM = 4'h5; parameter PM = 4'h6;
     end
     
     //Falta definir como se si es de mañana o tarde
-    else if (M_vreg >= AM1_v && M_vreg <= AM2_v && F_H == 1'b1 && AM_PM == 1'b0)
+    else if (M_vreg >= AM1_v && M_vreg < AM2_v && F_H == 1'b1 && AM_PM == 1'b0)
     begin
-        if (M_hreg >= AM1_h && M_hreg <= AM2_h)
+        if (M_hreg >= AM1_h && M_hreg < AM2_h)
             DIR <= {AM, SELEC_COL};
         else
             DIR <= 9'h000;
     end
 
-    else if (M_vreg >= PM1_v && M_vreg <= PM2_v && F_H == 1'b1 && AM_PM == 1'b1)
+    else if (M_vreg >= PM1_v && M_vreg < PM2_v && F_H == 1'b1 && AM_PM == 1'b1)
     begin
-        if (M_hreg >= PM1_h && M_hreg <= PM2_h)
+        if (M_hreg >= PM1_h && M_hreg < PM2_h)
             DIR <= {PM, SELEC_COL};
         else
             DIR <= 9'h000;

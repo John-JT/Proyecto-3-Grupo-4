@@ -2,9 +2,6 @@
 
 module Numeros(
     input [2:0] switch_w,
-    //input [1:0] in_port,    
-    input [7:0] port_id,
-    //input en_00,
     input bit_alarma,
     input [1:0] Contador_pos_f,
     input [1:0] Contador_pos_h,
@@ -29,21 +26,9 @@ module Numeros(
     reg [15:0] data; 
     reg [3:0] SELEC_PX;  
     wire [7:0] addr2;
-    reg Bit_alarma = 1'b0;
-    
-always@(posedge reloj)
-        begin
-             if (port_id == 8'h00)
-                 Bit_alarma <= bit_alarma;   
-             else
-                 Bit_alarma <= Bit_alarma;
-        end
-        
+            
  Manejo_Entradas inst_Manejo_Entradas(
           .switch_w(switch_w),
-          /*.in_port(in_port),
-          .port_id(port_id[0]),
-          .en_00(en_00),*/
           .Contador_pos_f(Contador_pos_f), 
           .Contador_pos_h(Contador_pos_h), 
           .Contador_pos_cr(Contador_pos_cr),
@@ -271,9 +256,9 @@ always@(posedge reloj)
     
   endcase
  
-  always @(Bit_alarma,SELEC_PX,data[15],data[14],data[13],data[12],data[11],data[10],
+  always @(bit_alarma,SELEC_PX,data[15],data[14],data[13],data[12],data[11],data[10],
   data[9],data[8], data[7], data[6], data[5], data[4], data[3], data[2], data[1], data[0])
-  if (Bit_alarma == 1'b0)
+  if (bit_alarma == 1'b0)
      case (SELEC_PX)
      
         4'b0000: bit_fuente <= data[15];

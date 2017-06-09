@@ -3,7 +3,6 @@
 module Graficos(
     input F_H,
     input [2:0] switch_w,
-    input [1:0] out_port,
     input [7:0] port_id,
     input en_00,
     input [1:0] Contador_pos_f,
@@ -37,7 +36,17 @@ module Graficos(
     reg enable_alarma;
     wire ENABLE_ALARMA;
     wire AM_PM;
-        
+    reg Bit_alarma = 1'b0;
+    
+    
+   always@(posedge reloj)
+    begin
+         if (port_id == 8'h00 && en_00)
+             Bit_alarma <= bit_alarma;   
+         else
+             Bit_alarma <= Bit_alarma;
+    end
+    
     counter inst_counter(
    .Qh(Qh),
    .Qv(Qv),
@@ -50,8 +59,7 @@ module Graficos(
     );
         
     font_rom8x8 inst_font_rom8x8(
-    .port_id(port_id),
-    .bit_alarma(out_port[0]),
+    .bit_alarma(Bit_alarma),
     .Qh(Qh),
     .Qv(Qv),
     .resetM(resetM),
@@ -60,8 +68,7 @@ module Graficos(
      );
      
     font_rom8x16 inst_font_rom8x16(
-     .port_id(port_id),
-     .bit_alarma(out_port[0]),
+     .bit_alarma(Bit_alarma),
      .Qh(Qh),
      .Qv(Qv),
      .resetM(resetM),
@@ -71,10 +78,7 @@ module Graficos(
       
     Numeros inst_Numeros(
           .switch_w(switch_w),
-          //.in_port(out_port[1:0]),
-          .port_id(port_id),
-          //.en_00(en_00),
-          .bit_alarma(bit_alarma),
+          .bit_alarma(Bit_alarma),
           .Contador_pos_f(Contador_pos_f), 
           .Contador_pos_h(Contador_pos_h), 
           .Contador_pos_cr(Contador_pos_cr),
@@ -95,10 +99,7 @@ module Graficos(
     
      RGB inst_RGB(
         .switch_w(switch_w),
-        //.in_port(out_port[1:0]),
-        .port_id(port_id),
-        //.en_00(en_00),
-        .bit_alarma(bit_alarma),
+        .bit_alarma(Bit_alarma),
         .reloj(reloj),
         .cam_co(cam_co),
         .H_ON(H_ON),
@@ -115,8 +116,7 @@ module Graficos(
  Impresion_Imagenes inst_Impresion_Imagenes(
         .AM_PM(AM_PM),
         .F_H(F_H),
-        .port_id(port_id),
-        .bit_alarma(out_port[0]),
+        .bit_alarma(Bit_alarma),
         .Qh(Qh),
         .Qv(Qv),
         .reloj(reloj),
@@ -125,8 +125,7 @@ module Graficos(
             );
             
  ALARMA_IMAGEN inst_ALARMA_IMAGEN(
-        .port_id(port_id),
-        .bit_alarma(out_port[0]),
+        .bit_alarma(Bit_alarma),
         .Qh(Qh),
         .Qv(Qv),
         .reloj(reloj),

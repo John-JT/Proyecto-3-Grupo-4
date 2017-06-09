@@ -4,7 +4,6 @@
 module Impresion_Imagenes(
 input AM_PM,
 input F_H,
-input [7:0] port_id,
 input bit_alarma,
 input [9:0] Qh,
 input [9:0] Qv,
@@ -19,7 +18,6 @@ reg [8:0] addr_reg;
 reg [4:0] SELEC_PX;
 wire [8:0] addr; 
 reg bit_fuente;
-reg Bit_alarma = 1'b0;
 
  Posicion_Imagenes inst_Posicion_Imagenes(
     .AM_PM(AM_PM),
@@ -30,13 +28,6 @@ reg Bit_alarma = 1'b0;
     .resetM(resetM),
     .DIR_IM(addr)
     );
-always@(posedge reloj)
-    begin
-         if (port_id == 8'h00)
-             Bit_alarma <= bit_alarma;   
-         else
-             Bit_alarma <= Bit_alarma;
-    end
   
 
 always @(*)
@@ -589,8 +580,8 @@ always @(posedge reloj)
     
 
 
-   always @(Bit_alarma, SELEC_PX,data)
-   if (Bit_alarma == 1'b0)
+   always @(bit_alarma, SELEC_PX,data)
+   if (bit_alarma == 1'b0)
          case (SELEC_PX)
             5'b00000: bit_fuente <= 1'b0; //data[31]
             5'b00001: bit_fuente <= data[30];

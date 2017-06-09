@@ -3,9 +3,6 @@
 
 module RGB(
     input [2:0] switch_w,
-    //input [1:0] in_port,    
-    input [7:0] port_id,
-    //input en_00,
     input bit_alarma,
     input reloj,
     input [8:0] cam_co,
@@ -36,7 +33,6 @@ module RGB(
         parameter COUNTER_WIDTH = 29;
         reg cambio = 1'b0;
         reg [COUNTER_WIDTH-1:0] enable_cont_alarma = {COUNTER_WIDTH{1'b0}};
-        reg Bit_alarma = 1'b0;
         
         assign cam_co1 = cam_co[8];
         assign cam_co2 = cam_co[7];
@@ -48,13 +44,6 @@ module RGB(
         assign cam_co8 = cam_co[1];
         assign cam_co9 = cam_co[0];
         
-        always@(posedge reloj)
-            begin
-                 if (port_id == 8'h00)
-                     Bit_alarma <= bit_alarma;   
-                 else
-                     Bit_alarma <= Bit_alarma;
-            end
             
         
         assign Cam_Co = (((switch_w[2] & ~switch_w[1] & ~switch_w[0])|(~switch_w[2] & switch_w[1] & ~switch_w[0]) | (~switch_w[2] & ~switch_w[1] & switch_w[0])) 
@@ -127,7 +116,7 @@ module RGB(
             //end
             if (Encendido == 1'b1) 
             begin
-            if (Bit_alarma == 1'b0)
+            if (bit_alarma == 1'b0)
                       case (COL_SEL)
                          3'b000: color <= {4'h0, 4'h0, 4'h1};
                          3'b001: color <= {4'h0, 4'h0, 4'h1};
@@ -138,7 +127,7 @@ module RGB(
                          //3'b110: color <= {};
                          default: color <= 12'h000;
                       endcase
-            else if (Bit_alarma == 1'b1)
+            else if (bit_alarma == 1'b1)
               case (col_ala)
                     3'b000: color <= {4'hf, 4'hf, 4'hf};
                     3'b001: color <= {4'h0, 4'h0, 4'h7};
@@ -155,7 +144,7 @@ module RGB(
       end
     always @(posedge reloj)
       begin
-      if (Bit_alarma == 1'b0)begin
+      if (bit_alarma == 1'b0)begin
          cambio <= 1'b0;
          enable_cont_alarma <= {COUNTER_WIDTH{1'b0}};
       end

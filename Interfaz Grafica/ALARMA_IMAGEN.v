@@ -2,7 +2,6 @@
 
 
 module ALARMA_IMAGEN(
-input [7:0] port_id,
 input bit_alarma,
 input [9:0] Qh,
 input [9:0] Qv,
@@ -16,14 +15,6 @@ reg [255:0] data;
 reg [8:0] addr_reg;
 reg [7:0] SELEC_PX;
 reg bit_fuente;
-reg Bit_alarma = 1'b0;
-always@(posedge reloj)
-    begin
-         if (port_id == 8'h00)
-             Bit_alarma <= bit_alarma;   
-         else
-             Bit_alarma <= Bit_alarma;
-    end
 
 always@(*)begin
     SELEC_PX <= {Qh[7:0]};
@@ -39,7 +30,7 @@ always@(*)begin
 end
 
 always@(posedge reloj)begin
-        if (Bit_alarma == 1'b1 && resetM == 1'b0)
+        if (bit_alarma == 1'b1 && resetM == 1'b0)
         case (addr_reg)
         9'h000:data <= 256'hffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff;
         9'h001:data <= 256'hffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff;
@@ -303,8 +294,8 @@ always@(posedge reloj)begin
             else 
                 data <= 256'd0;
     end
-    always@(SELEC_PX, data, resetM , Bit_alarma)begin
-      if (Bit_alarma == 1'b1 && resetM == 1'b0)
+    always@(SELEC_PX, data, resetM , bit_alarma)begin
+      if (bit_alarma == 1'b1 && resetM == 1'b0)
          case (SELEC_PX)
          8'b00000000: bit_fuente <= data[255];
          8'b00000001: bit_fuente <= data[254];

@@ -9,7 +9,6 @@
 
 module font_rom8x16
 (
-input [7:0] port_id,
 input bit_alarma,
 input wire [9:0] Qh,
 input wire [9:0] Qv,
@@ -24,7 +23,6 @@ reg [15:0] data;
 wire[8:0] addr;
 reg [3:0] SELEC_PX;
 reg bit_fuente2;
-reg Bit_alarma = 1'b0;
 
 Posicion_ROM8x16 inst_Posicion_ROM8x16(
 .resetM(resetM),
@@ -33,13 +31,6 @@ Posicion_ROM8x16 inst_Posicion_ROM8x16(
 .reloj(reloj),
 .DIR8x16 (addr)
 );
-always@(posedge reloj)
-begin
-     if (port_id == 8'h00)
-         Bit_alarma <= bit_alarma;   
-     else
-         Bit_alarma <= Bit_alarma;
-end
 // body
 always @(*)
 SELEC_PX <= {Qh[3], Qh[2], Qh[1], Qh[0]};
@@ -587,9 +578,9 @@ always @(posedge reloj)
 endcase
 
 
-always @(Bit_alarma,SELEC_PX,data[15],data[14],data[13],data[12],data[11],data[10],
+always @(bit_alarma,SELEC_PX,data[15],data[14],data[13],data[12],data[11],data[10],
 data[9],data[8], data[7], data[6], data[5], data[4], data[3], data[2], data[1], data[0])
-if (Bit_alarma == 1'b0)
+if (bit_alarma == 1'b0)
   case (SELEC_PX)
   
      4'b0000: bit_fuente2 <= data[15];
